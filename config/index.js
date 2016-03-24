@@ -10,7 +10,7 @@ var config = {
       name: 'express-blog-api'
     },
     port: port,
-    db: 'mongodb://mongodb:27017/dict',
+    db: 'mongodb://mongodb:27017/test',
   },
 
   production: {
@@ -19,7 +19,7 @@ var config = {
       name: 'express-blog-api'
     },
     port: port,
-    db: 'mongodb://mongodb:27017/dict',
+    db: 'mongodb://mongodb:27017/test',
   }
 };
 

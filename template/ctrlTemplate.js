@@ -19,7 +19,7 @@ module.exports = function(model) {
     }
 
     <%= name %>Ctrl.get = function (req, res, next) {
-        model.findById(req.params.uid, function (err, <%= name %>) {
+        model.findById(req.params.id, function (err, <%= name %>) {
             if (err) { return next(err); }
             res.json(<%= name %>);
         });
@@ -33,16 +33,16 @@ module.exports = function(model) {
     };
 
     <%= name %>Ctrl.put = function(req, res, next) {
-        model.findOneAndUpdate({_id: req.body.uid}, req.body, function (err, <%= name %>) {
+        model.findOneAndUpdate({_id: req.params.id}, req.body, function (err, <%= name %>) {
             if (err) { return next(err); }
             res.json(<%= name %>); 
         })
     }
 
     <%= name %>Ctrl.remove = function(req, res, next) {
-        model.remove({ _id: req.params.uid }, function (err) {
+        model.remove({ _id: req.params.id }, function (err) {
           if (err) return handleError(err);
-          res.json({id: req.params.uid, message: 'delete completed'});
+          res.json({id: req.params.id, message: 'delete completed'});
         });
     }
     
