@@ -5,21 +5,21 @@ module.exports = function(model) {
     var userCtrl = {};
 
     userCtrl.list = function (req, res, next) {
-        model.find({}, function (err, users) {
+        model.find({}, function (err, user) {
             if (err) { return next(err); }
-            res.json(users);  
+            res.json(user);  
         });
     };
     
     userCtrl.search = function(req, res, next) {
-        model.find(req.query, function (err, users) {
+        model.find(req.query, function (err, user) {
             if (err) { return next(err); }
-            res.json(users);  
+            res.json(user);  
         });
     }
 
     userCtrl.get = function (req, res, next) {
-        model.findById(req.params.uid, function (err, user) {
+        model.findById(req.params.id, function (err, user) {
             if (err) { return next(err); }
             res.json(user);
         });
@@ -33,16 +33,16 @@ module.exports = function(model) {
     };
 
     userCtrl.put = function(req, res, next) {
-        model.findOneAndUpdate({_id: req.body.uid}, req.body, function (err, user) {
+        model.findOneAndUpdate({_id: req.params.id}, req.body, function (err, user) {
             if (err) { return next(err); }
             res.json(user); 
         })
     }
 
     userCtrl.remove = function(req, res, next) {
-        model.remove({ _id: req.params.uid }, function (err) {
+        model.remove({ _id: req.params.id }, function (err) {
           if (err) return handleError(err);
-          res.json({id: req.params.uid, message: 'delete completed'});
+          res.json({id: req.params.id, message: 'delete completed'});
         });
     }
     

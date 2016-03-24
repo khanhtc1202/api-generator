@@ -4,11 +4,11 @@ module.exports = function(mongoose) {
 
 	// create a schema
 	var userSchema = new Schema({
-		email: { type: String, required: true, unique: true },
-		fullname: String,
-		password: { type: String, required: true },
-		isAdmin: Boolean
-	});
+		//Define schema object
+		name: Object,
+		username: String,
+		
+	}, {collection: 'user'});
 
-	return mongoose.model('User', userSchema);	
+	return mongoose.model('user', userSchema);
 }
