@@ -1,7 +1,7 @@
 {
     "host": "localhost",
     "port": "27017",
-    "name": "dbauto",
+    "name": "dbtest1",
     "insertData": true,
     "collections": [
         {
