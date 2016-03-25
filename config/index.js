@@ -1,7 +1,7 @@
 var path = require('path'),
     rootPath = path.normalize(__dirname + '/..'),
     env = process.env.NODE_ENV || 'development',
-    port = 8000;
+    port = 8081;
 
 var config = {
   development: {
@@ -10,7 +10,7 @@ var config = {
       name: 'express-blog-api'
     },
     port: port,
-    db: 'mongodb://localhost/dbblog',
+    db: 'mongodb://mongodb:27017/test',
   },
 
   production: {
@@ -19,7 +19,7 @@ var config = {
       name: 'express-blog-api'
     },
     port: port,
-    db: 'mongodb://128.199.91.28:27017/dbblog-production',
+    db: 'mongodb://mongodb:27017/test',
   }
 };
 

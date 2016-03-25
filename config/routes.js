@@ -13,10 +13,10 @@ module.exports = function (app, utils, models) {
       console.log('Route /' + name + " completed.");
       app.get('/api/'+name, ctrls[name].list); // get list
       app.get('/api/'+name+'/search', ctrls[name].search); // search
-      app.get('/api/'+name+'/:uid([0-9a-f]+)', ctrls[name].get); // get by id
+      app.get('/api/'+name+'/:id([0-9a-f]+)', ctrls[name].get); // get by id
       app.post('/api/'+name, ctrls[name].post); // insert
-      app.put('/api/'+name, ctrls[name].put); // update
-      app.delete('/api/'+name+'/:uid([0-9a-f]+)', ctrls[name].remove); // delete
+      app.put('/api/'+name+'/:id([0-9a-f]+)', ctrls[name].put); // update
+      app.delete('/api/'+name+'/:id([0-9a-f]+)', ctrls[name].remove); // delete
   });
 
 

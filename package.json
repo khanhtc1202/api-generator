@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "gen": "gulp gen",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -14,9 +15,16 @@
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "jade": "^1.11.0",
+    "mongodb": "^2.1.8",
     "mongoose": "^4.4.6"
   },
   "devDependencies": {
-    "query-string": "^3.0.1"
+    "gulp": "^3.9.1",
+    "gulp-copy": "0.0.2",
+    "gulp-data": "^1.2.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-template": "^3.1.0",
+    "query-string": "^3.0.1",
+    "yargs": "^4.3.1"
   }
 }

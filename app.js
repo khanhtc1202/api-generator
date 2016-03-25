@@ -23,8 +23,6 @@ conn.on('open', function () {
   	require('./config/express')(app, config);
   	require('./config/routes')(app, utils, models);
 
-	
-
 	app.listen(config.port, function () {
 	  console.log('Blog API is listening on port ', config.port);
 	});

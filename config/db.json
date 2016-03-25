@@ -1,0 +1,42 @@
+{
+    "host": "localhost",
+    "port": "27017",
+    "name": "dbtest1",
+    "insertData": true,
+    "collections": [
+        {
+            "name": "users",
+            "schema": [
+                { "name": "email", "type": "String", "faker": "internet.email" },
+                { "name": "password", "type": "String", "faker": "internet.password" },
+                { "name": "fullname", "type": "String", "faker": "name.firstName" },
+                { "name": "isAdmin", "type": "Boolean"}
+            ]
+        },
+        {
+            "name": "posts",
+            "schema": [
+                { "name": "title", "type": "String", "faker": "lorem.sentence" },
+                { "name": "body", "type": "String", "faker": "lorem.paragraph" },
+                { "name": "author", "type": "Object", "faker": "name.firstName" },
+                { "name": "tag", "type": "Array", "faker": "lorem.words" },
+                { "name": "posted", "type": "Date" }
+            ]
+        },
+        {
+            "name": "tags",
+            "schema": [
+                { "name": "name", "type": "String", "faker": "name.firstName" }
+            ]
+        },
+        {
+            "name": "comments",
+            "schema": [
+                { "name": "owner", "type": "String", "faker": "name.firstName" },
+                { "name": "post", "type": "Object", "faker": "lorem.sentence" },
+                { "name": "content", "type": "String", "faker": "lorem.paragraph" },
+                { "name": "posted", "type": "Date" }
+            ]
+        }
+    ]
+}
