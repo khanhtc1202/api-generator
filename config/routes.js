@@ -11,7 +11,7 @@ module.exports = function (app, utils, models) {
   //set get default api
   names.forEach(function(name) {
       console.log('Route /' + name + " completed.");
-      app.get('/api/'+name, ctrls[name].list); // get list
+      app.get('/api/'+name+'/:page([0-9]+)', ctrls[name].list); // get list
       app.get('/api/'+name+'/search', ctrls[name].search); // search
       app.get('/api/'+name+'/:id([0-9a-f]+)', ctrls[name].get); // get by id
       app.post('/api/'+name, ctrls[name].post); // insert
