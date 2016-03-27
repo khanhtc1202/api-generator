@@ -7,8 +7,8 @@ module.exports = function(model) {
     userCtrl.list = function (req, res, next) {
         model.findPaginated({}, function (err, user) {
             if (err) { return next(err); }
-            res.json(user);  
-        }, 1, parseInt(req.params.page));
+            res.json(user.documents);  
+        }, 10, parseInt(req.params.page));
     };
     
     userCtrl.search = function(req, res, next) {

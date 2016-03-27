@@ -7,7 +7,7 @@ module.exports = function(model) {
     <%= name %>Ctrl.list = function (req, res, next) {
         model.findPaginated({}, function (err, <%= name %>) {
             if (err) { return next(err); }
-            res.json(<%= name %>);  
+            res.json(<%= name %>.documents);  
         }, 10, parseInt(req.params.page));
     };
     
