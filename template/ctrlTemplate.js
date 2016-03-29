@@ -5,10 +5,12 @@ module.exports = function(model) {
     var <%= name %>Ctrl = {};
 
     <%= name %>Ctrl.list = function (req, res, next) {
+        var page = 1;
+        if(req.params.page) {page = parseInt(req.params.page);}
         model.findPaginated({}, function (err, <%= name %>) {
             if (err) { return next(err); }
             res.json(<%= name %>.documents);  
-        }, 10, parseInt(req.params.page));
+        }, 10, page);
     };
     
     <%= name %>Ctrl.search = function(req, res, next) {

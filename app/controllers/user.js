@@ -6,9 +6,11 @@ module.exports = function(model) {
 
     userCtrl.list = function (req, res, next) {
         model.findPaginated({}, function (err, user) {
+            var page = 1;
+            if(req.params.page) {page = parseInt(req.params.page);}
             if (err) { return next(err); }
             res.json(user.documents);  
-        }, 10, parseInt(req.params.page));
+        }, 10, page);
     };
     
     userCtrl.search = function(req, res, next) {
