@@ -2,6 +2,7 @@ var express = require('express')
   , os = require('os')
   , interfaces = os.networkInterfaces()
   , bodyParser  = require('body-parser')
+  // , paginate = require('express-paginate')
   , addrs = [];
 
 module.exports = function (app, config) {
@@ -11,7 +12,8 @@ module.exports = function (app, config) {
   app.set('views', config.root + '/app/views');
   app.set('view engine', 'ejs');  
 
-  app.use(bodyParser.json());         
+  app.use(bodyParser.json());  
+  // app.use(paginate.middleware(10, 50));       
   app.use(bodyParser.urlencoded({     
         extended: true                  
   }));                    
