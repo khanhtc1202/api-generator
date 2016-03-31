@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Administration page</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="build/main.css"/>
+        <link rel="stylesheet" href="../node_modules/ng-admin/build/ng-admin.min.css">
+    </head>
+    <body ng-app="myApp">
+        <div ui-view></div>
+        <script type="text/javascript">
+        var username = window.localStorage.getItem('posters_galore_login');
+        if (!username) {
+            window.location.href = "./login.html";
+        }
+        function logout() {
+            window.localStorage.removeItem('posters_galore_login');
+            window.location.href = "./login.html";
+        }
+        </script>
+        <script src="http://requirejs.org/docs/release/2.1.11/minified/require.js" type="text/javascript"></script>
+        <script src="../node_modules/ng-admin/build/ng-admin.min.js" type="text/javascript"></script>
+        <script src="admin.js" type="text/javascript"></script>
+    </body>
+</html>

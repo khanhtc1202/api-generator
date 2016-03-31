@@ -9,7 +9,7 @@ module.exports = function(model) {
         if(req.params.page) {page = parseInt(req.params.page);}
         model.findPaginated({}, function (err, company) {
             if (err) { return next(err); }
-            res.json(company.documents);
+            res.json(company.documents);  
         }, 10, page);
     };
     

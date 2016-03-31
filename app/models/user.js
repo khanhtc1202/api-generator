@@ -6,9 +6,15 @@ module.exports = function(mongoose) {
 	// create a schema
 	var userSchema = new Schema({
 		//Define schema object
-		name: Object,
+		name: String,
 		username: String,
-		
+		email: String,
+		phone: String,
+		company: {
+			name: String,
+			address: String,
+		},
+
 	}, {collection: 'user'});
 	mongoosePages.skip(userSchema); // makes the findPaginated() method available
 
