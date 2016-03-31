@@ -101,7 +101,7 @@ function genAdmin(categoryName, dataStructure) {
         }
     }))
     .pipe(template())
-    .pipe(rename('admin.js'))
+    .pipe(rename(categoryName+'.js'))
     .pipe(gulp.dest('./manager/'));
 }
 
