@@ -3,11 +3,10 @@ var MongoClient = require('mongodb').MongoClient;
 var gulp = require('gulp'),
 	template = require('gulp-template'),
     gulp_data = require('gulp-data'),
-    // copy = require('gulp-copy'),
     rename = require('gulp-rename');
 
 gulp.task('gen', function () {
-    adminInitialize();
+    var adminData = {};
     MongoClient.connect(config.db, function(err, db) {
         db.listCollections({}).toArray().then(function(items) {
 
@@ -16,32 +15,19 @@ gulp.task('gen', function () {
                     db.collection(item.name, function(err, col) {
                         col.findOne({}, function(err, data){
                             console.log('Schema table ' + item.name);
-                            var schema = '';
-                            var dataStructure = [];
-                            delete data['_id'];
-                            for (var _k in data){
-                                var dataType = typeof data[_k];
-                                if(dataType != 'object'){
-                                    schema += _k + ': ' + refineType(dataType) + ',\n\t\t';
-                                    dataStructure.push({'name': _k , 'type': dataType});
-                                }else{
-                                    schema += _k + ': {\n';
-                                    for(var key in data[_k]){
-                                        schema += '\t\t\t' + key + ': ' + refineType(typeof data[_k][key]) + ',\n';
-                                        dataStructure.push({'name': _k+'.'+key , 'type': typeof data[_k][key]});
-                                    }
-                                    schema += '\t\t},\n';
-                                }
-                            }
-                            console.log(dataStructure);
-                            genAdmin(item.name, dataStructure);
+                            var value = genSchemaAndDataStructure(data);
+                            adminData[item.name] = value.dataStructure;
                             genCtrl(item.name);
-                            genModels(item.name, schema);
+                            genModels(item.name, value.schema);
                         })
                     });
                 }
             })
         });
+        setTimeout(function(){
+            genAdmin(adminData);
+            console.log('Gen admin page completed!');
+        },10000);
     });
 });
 
@@ -49,13 +35,40 @@ function refineType(stringType) {
     return stringType.charAt(0).toUpperCase() + stringType.slice(1);
 }
 
-function genCategoryContent(categoryName, dataStructure) {
-    var categoryContent;
-    categoryContent = categoryName+'\n\tvar '+categoryName+' = nga.entity(\''+categoryName+'\').identifier(nga.field(\'_id\'));';
-    categoryContent += genListViewContent(categoryName, dataStructure);
-    categoryContent += genCreateContent(categoryName, dataStructure);
-    categoryContent += genEditContent(categoryName, dataStructure);
-    categoryContent += '\n\t// <%= categoryContent %>';
+function genSchemaAndDataStructure(data){
+    var schema = '';
+    var dataStructure = [];
+    delete data['_id'];
+    for (var _k in data){
+        var dataType = typeof data[_k];
+        if(dataType != 'object'){
+            schema += _k + ': ' + refineType(dataType) + ',\n\t\t';
+            dataStructure.push({'name': _k , 'type': dataType});
+        }else{
+            schema += _k + ': {\n';
+            for(var key in data[_k]){
+                schema += '\t\t\t' + key + ': ' + refineType(typeof data[_k][key]) + ',\n';
+                dataStructure.push({'name': _k+'.'+key , 'type': typeof data[_k][key]});
+            }
+            schema += '\t\t},\n';
+        }
+    }
+    return {
+        schema : schema,
+        dataStructure : dataStructure
+    }
+}
+
+function genCategoryContent(adminData) {
+    var categoryContent ='';
+    for(var key in adminData){
+        var dataStructure = adminData[key];
+        categoryContent += (key+'\n\tvar '+key+' = nga.entity(\''+key+'\').identifier(nga.field(\'_id\'));');
+        categoryContent += genListViewContent(key, dataStructure);
+        categoryContent += genCreateContent(key, dataStructure);
+        categoryContent += genEditContent(key, dataStructure);
+        categoryContent += '\n\t// ';
+    }
     return categoryContent;
 }
 
@@ -79,29 +92,33 @@ function genEditContent(categoryName, dataStructure) {
     return '\n\t'+categoryName+'.editionView().fields('+categoryName+'.creationView().fields());';
 }
 
-function genCategoryEntity(categoryName) {
-    var categoryEntity;
-    categoryEntity = categoryName+'\n\tadmin.addEntity('+categoryName+');\n\t// <%= categoryEntity %>';
+function genCategoryEntity(adminData) {
+    var categoryEntity = '';
+    for(var key in adminData){
+        categoryEntity += (key+'\n\tadmin.addEntity('+key+');\n\t// ');
+    }
     return categoryEntity;
 }
 
-function genCategoryMenu(categoryName) {
-    var categoryMenu;
-    categoryMenu = categoryName+'\n\t\t.addChild(nga.menu('+categoryName+').icon(\'<span class="glyphicon glyphicon-user"></span>\'))\n\t\t// <%= categoryMenu %>';
+function genCategoryMenu(adminData) {
+    var categoryMenu = '';
+    for(var key in adminData){
+        categoryMenu += (key+'\n\t\t.addChild(nga.menu('+key+').icon(\'<span class="glyphicon glyphicon-user"></span>\'))\n\t\t// ');
+    }
     return categoryMenu;
 }
 
-function genAdmin(categoryName, dataStructure) {
-    gulp.src('./manager/admin.js')
+function genAdmin(adminData) {
+    gulp.src('./template/adminTemplate.js')
     .pipe(gulp_data(function (){
         return {
-            categoryEntity : genCategoryEntity(categoryName),
-            categoryMenu : genCategoryMenu(categoryName),
-            categoryContent : genCategoryContent(categoryName, dataStructure),
+            categoryEntity : genCategoryEntity(adminData),
+            categoryMenu : genCategoryMenu(adminData),
+            categoryContent : genCategoryContent(adminData),
         }
     }))
     .pipe(template())
-    .pipe(rename(categoryName+'.js'))
+    .pipe(rename('admin.js'))
     .pipe(gulp.dest('./manager/'));
 }
 
@@ -109,12 +126,6 @@ function copyFile(sourceFile, fileName, destFile) {
     gulp.src(sourceFile)
     .pipe(rename(fileName))
     .pipe(gulp.dest(destFile));
-}
-
-function adminInitialize() {
-    gulp.src('./template/adminTemplate.js')
-    .pipe(rename('admin.js'))
-    .pipe(gulp.dest('./manager/'));
 }
 
 function genCtrl (name){
@@ -136,17 +147,3 @@ function genModels (name, data){
     .pipe(rename(name+'.js'))
     .pipe(gulp.dest('./app/models/'));
 }
-
-// function genCategoryManager(categoryName, showData, createData) {
-//     gulp.src('./template/categoryTemplate.js')
-//     .pipe(gulp_data(function (){
-//         return {
-//                 categoryName : categoryName,
-//                 showData : showData,
-//                 createData : createData
-//                 }
-//     }))
-//     .pipe(template())
-//     .pipe(rename(categoryName+'.js'))
-//     .pipe(gulp.dest('./manager/'));
-// }

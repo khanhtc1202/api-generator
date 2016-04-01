@@ -6,55 +6,55 @@ myApp.config(['NgAdminConfigurationProvider', function (nga) {
     	.baseApiUrl(baseApiUrl);
 
     // user
-    var user = nga.entity('user').identifier(nga.field('_id'));
-    user.listView()
-        .fields([
-            nga.field('name'),
-            nga.field('username'),
-            nga.field('email'),
-            nga.field('phone'),
-            nga.field('company.name'),
-            nga.field('company.address'),
-        ])
-        .listActions(['edit', 'delete']);
-    user.creationView()
-        .fields([
-            nga.field('name').validation({ required: true }),
-            nga.field('username').validation({ required: true }),
-            nga.field('email').validation({ required: true }),
-            nga.field('phone').validation({ required: true }),
-            nga.field('company.name').validation({ required: true }),
-            nga.field('company.address').validation({ required: true }),
-        ]);
-    user.editionView().fields(user.creationView().fields());
-    // company
-    var company = nga.entity('company').identifier(nga.field('_id'));
-    company.listView()
-        .fields([
-            nga.field('name'),
-            nga.field('address'),
-        ])
-        .listActions(['edit', 'delete']);
-    company.creationView()
-        .fields([
-            nga.field('name').validation({ required: true }),
-            nga.field('address').validation({ required: true }),
-        ]);
-    company.editionView().fields(company.creationView().fields());
-    // <%= categoryContent %>
+	var user = nga.entity('user').identifier(nga.field('_id'));
+	user.listView()
+		.fields([
+			nga.field('name'),
+			nga.field('username'),
+			nga.field('email'),
+			nga.field('phone'),
+			nga.field('company.name'),
+			nga.field('company.address'),
+		])
+		.listActions(['edit', 'delete']);
+	user.creationView()
+		.fields([
+			nga.field('name').validation({ required: true }),
+			nga.field('username').validation({ required: true }),
+			nga.field('email').validation({ required: true }),
+			nga.field('phone').validation({ required: true }),
+			nga.field('company.name').validation({ required: true }),
+			nga.field('company.address').validation({ required: true }),
+		]);
+	user.editionView().fields(user.creationView().fields());
+	// company
+	var company = nga.entity('company').identifier(nga.field('_id'));
+	company.listView()
+		.fields([
+			nga.field('name'),
+			nga.field('address'),
+		])
+		.listActions(['edit', 'delete']);
+	company.creationView()
+		.fields([
+			nga.field('name').validation({ required: true }),
+			nga.field('address').validation({ required: true }),
+		]);
+	company.editionView().fields(company.creationView().fields());
+	// 
 
     // user
-    admin.addEntity(user);
-    // company
-    admin.addEntity(company);
-    // <%= categoryEntity %>
+	admin.addEntity(user);
+	// company
+	admin.addEntity(company);
+	// 
 
     admin.menu(nga.menu()
         // user
-        .addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>'))
-        // company
-        .addChild(nga.menu(company).icon('<span class="glyphicon glyphicon-user"></span>'))
-        // <%= categoryMenu %>
+		.addChild(nga.menu(user).icon('<span class="glyphicon glyphicon-user"></span>'))
+		// company
+		.addChild(nga.menu(company).icon('<span class="glyphicon glyphicon-user"></span>'))
+		// 
     );
 
     nga.configure(admin);
