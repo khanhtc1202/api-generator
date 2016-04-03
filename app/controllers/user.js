@@ -5,9 +5,9 @@ module.exports = function(model) {
     var userCtrl = {};
 
     userCtrl.list = function (req, res, next) {
+        var page = 1;
+        if(req.params.page) {page = parseInt(req.params.page);}
         model.findPaginated({}, function (err, user) {
-            var page = 1;
-            if(req.params.page) {page = parseInt(req.params.page);}
             if (err) { return next(err); }
             res.json(user.documents);  
         }, 10, page);
