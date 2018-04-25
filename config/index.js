@@ -10,7 +10,14 @@ var config = {
       name: 'express-blog-api'
     },
     port: port,
-    db: 'mongodb://mongodb:27017/test',
+    db: 'mongodb://localhost:27017/test',
+    mysql: {
+      host: '127.0.0.1',
+      user: 'root',
+      password: 'root',
+      database: 'api_generator',
+      charset: 'utf8'
+    }
   },
 
   production: {

@@ -5,6 +5,17 @@ var gulp = require('gulp'),
     gulp_data = require('gulp-data'),
     rename = require('gulp-rename');
 
+var connect = require('knex')({
+    client: 'mysql',
+    connection: {
+        host     : config.mysql.host,
+        user     : config.mysql.user,
+        password : config.mysql.password,
+        database : config.mysql.database,
+        charset  : config.mysql.charset
+    }
+});
+
 gulp.task('gen', function () {
     var adminData = {};
     MongoClient.connect(config.db, function(err, db) {
@@ -29,6 +40,25 @@ gulp.task('gen', function () {
             console.log('Gen admin page completed!');
         },10000);
     });
+});
+
+gulp.task('gen-mysql', () => {
+    return connect.raw('SHOW TABLES')
+        .then(([tables]) => {
+            tables.forEach((table) => {
+                tableName = table[`Tables_in_${'api_generator'}`];
+                
+                genMysqlModel(tableName);
+                genMysqlCtrl(tableName);
+
+                console.log('Schema table ' + tableName);
+            });
+            return;
+        })
+        .catch((error) => {
+            console.log("Cann't connect to DB!\n", error);
+            return [];
+        });
 });
 
 function refineType(stringType) {
@@ -142,6 +172,26 @@ function genModels (name, data){
     gulp.src('./template/modelsTemplate.js')
     .pipe(gulp_data(function (){
         return {name : name, data: data}
+    }))
+    .pipe(template())
+    .pipe(rename(name+'.js'))
+    .pipe(gulp.dest('./app/models/'));
+}
+
+function genMysqlCtrl (name){
+    gulp.src('./template/mysqlCtrlTemplate.js')
+    .pipe(gulp_data(function (){
+        return {name : name}
+    }))
+    .pipe(template())
+    .pipe(rename(name+'.js'))
+    .pipe(gulp.dest('./app/controllers/'));
+}
+
+function genMysqlModel (name){
+    gulp.src('./template/mysqlModelTemplate.js')
+    .pipe(gulp_data(function (){
+        return {name : name}
     }))
     .pipe(template())
     .pipe(rename(name+'.js'))
